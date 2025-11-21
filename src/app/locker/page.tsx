@@ -45,7 +45,7 @@ export default function LockerPage() {
               </div>
               <h3 className="font-semibold text-gray-300 mb-2 uppercase tracking-wider text-xs">Pay Fee</h3>
               <p className="text-gray-500 text-sm font-light">
-                1 SOL service fee is collected before lock
+                0.3 SOL service fee (0.2 SOL with referral) is collected before lock
               </p>
             </div>
             

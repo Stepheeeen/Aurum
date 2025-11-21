@@ -45,7 +45,7 @@ export default function BurnPage() {
               </div>
               <h3 className="font-semibold text-gray-300 mb-2 uppercase tracking-wider text-xs">Pay Fee</h3>
               <p className="text-gray-500 text-sm font-light">
-                0.5 SOL service fee is collected before burn
+                0.15 SOL service fee (0.05 SOL with referral) is collected before burn
               </p>
             </div>
             

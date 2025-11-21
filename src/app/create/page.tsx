@@ -60,7 +60,7 @@ export default function CreatePage() {
         <div className="mt-12 text-center animate-slideUp" style={{ animationDelay: '0.2s' }}>
           <div className="inline-block border-t border-gray-800 pt-6">
             <p className="text-xs text-gray-600 uppercase tracking-widest mb-2 font-light">Service Fee</p>
-            <p className="font-elegant text-lg text-gray-400">2 SOL per token creation</p>
+            <p className="font-elegant text-lg text-gray-400">0.6 SOL per token creation (0.5 SOL with referral)</p>
           </div>
         </div>
       </div>

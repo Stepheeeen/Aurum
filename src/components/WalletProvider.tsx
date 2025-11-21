@@ -5,11 +5,15 @@ import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import "@solana/wallet-adapter-react-ui/styles.css";
+import { NETWORK, RPC_URL } from "@/lib/config";
 
 export default function SolanaWalletProvider({ children }: { children: ReactNode }) {
-  const network = WalletAdapterNetwork.Mainnet;
+  const network: WalletAdapterNetwork =
+    NETWORK === 'mainnet' ? WalletAdapterNetwork.Mainnet :
+    NETWORK === 'testnet' ? WalletAdapterNetwork.Testnet :
+    WalletAdapterNetwork.Devnet;
 
-  const endpoint = "https://api.mainnet-beta.solana.com";
+  const endpoint = RPC_URL;
   
   // Include multiple wallet adapters - the modal will auto-detect installed wallets
   const wallets = useMemo(

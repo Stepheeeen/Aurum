@@ -22,12 +22,14 @@ const connection = new Connection(RPC_URL);
 
 export async function createMintWithFee({
   wallet,
-  supply
+  supply,
+  decimals
 }: {
   wallet: any;
   supply: number;
+  decimals: number;
 }) {
-  const feeLamports = 2 * 1e9; // 2 SOL
+  const feeLamports = 0.6 * LAMPORTS_PER_SOL; // Align with on-chain base fee
 
   // Step 1: Transfer Fee
   const feeTx = new Transaction().add(
@@ -47,7 +49,7 @@ export async function createMintWithFee({
     wallet as any,
     wallet.publicKey,
     wallet.publicKey,
-    9
+    decimals
   );
 
   const ata = await getOrCreateAssociatedTokenAccount(
@@ -74,7 +76,7 @@ export async function lockTokensWithFee({
   amount: number;
   unlockDate: Date;
 }) {
-  const feeLamports = 1 * LAMPORTS_PER_SOL; // 1 SOL fee
+  const feeLamports = 0.3 * LAMPORTS_PER_SOL; // Align with on-chain base fee
 
   // Step 1: Transfer Fee
   const feeTx = new Transaction().add(
@@ -143,7 +145,7 @@ export async function burnTokensWithFee({
   mintAddress: string;
   amount: number;
 }) {
-  const feeLamports = 0.5 * LAMPORTS_PER_SOL; // 0.5 SOL fee
+  const feeLamports = 0.15 * LAMPORTS_PER_SOL; // Align with on-chain base fee
 
   // Step 1: Transfer Fee
   const feeTx = new Transaction().add(
@@ -205,18 +207,15 @@ export async function getTokenBalance({
   try {
     const mint = new PublicKey(mintAddress);
     const owner = new PublicKey(ownerAddress);
-    
-    const tokenAccount = await getOrCreateAssociatedTokenAccount(
-      connection,
-      // Using a dummy payer for read-only operation
-      Keypair.generate() as any,
-      mint,
-      owner,
-      true // allowOwnerOffCurve
-    );
 
-    const accountInfo = await getAccount(connection, tokenAccount.address);
-    return Number(accountInfo.amount);
+    const resp = await connection.getParsedTokenAccountsByOwner(owner, { mint });
+    let total = 0;
+    for (const { account } of resp.value) {
+      const parsed: any = account.data;
+      const amtStr = parsed.parsed.info.tokenAmount.amount as string;
+      total += Number(amtStr);
+    }
+    return total;
   } catch (error) {
     return 0;
   }

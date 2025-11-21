@@ -3,6 +3,7 @@
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useState } from "react";
 import { lockTokensWithFee } from "@/lib/solana";
+import { EXPLORER_CLUSTER_SUFFIX } from "@/lib/config";
 
 interface LockerFormData {
   mintAddress: string;
@@ -179,7 +180,7 @@ export default function LockerForm() {
       {/* Fee Info */}
       <div className="border border-yellow-600/20 bg-yellow-600/5 p-6">
         <p className="text-sm text-gray-400 text-center font-light">
-          <span className="text-yellow-600 font-semibold">Service Fee:</span> 1 SOL
+          <span className="text-yellow-600 font-semibold">Service Fee:</span> 0.3 SOL (0.2 SOL with referral)
         </p>
       </div>
 
@@ -256,7 +257,7 @@ export default function LockerForm() {
                 {lockResult.lockSig}
               </div>
               <a
-                href={`https://explorer.solana.com/tx/${lockResult.lockSig}?cluster=devnet`}
+                href={`https://explorer.solana.com/tx/${lockResult.lockSig}${EXPLORER_CLUSTER_SUFFIX}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-xs text-yellow-600 hover:text-yellow-500 mt-2 inline-block transition-colors tracking-wide"

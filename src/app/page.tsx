@@ -47,8 +47,16 @@ export default function Home() {
               </div>
               
               <div className="text-center border-l border-r border-gray-800">
-                <div className="font-luxury text-4xl md:text-5xl gold-text mb-2 font-semibold">
-                  2 SOL
+                <div className="mb-2">
+                  <div className="font-luxury text-2xl text-gray-600 line-through mb-1">
+                    1.2 SOL
+                  </div>
+                  <div className="font-luxury text-4xl md:text-5xl gold-text font-semibold">
+                    0.6 SOL
+                  </div>
+                  <div className="text-xs text-yellow-600/80 mt-1 font-light">
+                    (0.5 SOL with referral)
+                  </div>
                 </div>
                 <p className="text-sm text-gray-500 uppercase tracking-widest font-light">Creation Fee</p>
               </div>
@@ -140,6 +148,100 @@ export default function Home() {
             </div>
             <p className="text-gray-500 leading-relaxed font-light">
               Live deployment with instant exchange accessibility
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Referral Program Section */}
+      <div className="max-w-7xl mx-auto px-4 py-32 border-t border-gray-900">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="font-luxury text-5xl md:text-6xl font-bold gold-text mb-6">
+              Referral Rewards
+            </h2>
+            <div className="w-24 h-px bg-gradient-to-r from-transparent via-yellow-600 to-transparent mx-auto mb-6"></div>
+            <p className="font-elegant text-xl text-gray-400 max-w-2xl mx-auto">
+              Share the elegance, earn rewards
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* For Referrers */}
+            <div className="border border-yellow-600/20 bg-black/40 p-8">
+              <div className="text-center mb-6">
+                <div className="inline-block border border-yellow-600/30 px-4 py-2 mb-4">
+                  <span className="text-yellow-600 text-xs tracking-[0.3em] uppercase">For Referrers</span>
+                </div>
+                <h3 className="font-luxury text-3xl font-semibold gold-text mb-4">
+                  Earn Rebates
+                </h3>
+              </div>
+              <ul className="space-y-4 mb-6">
+                <li className="flex items-start gap-3">
+                  <span className="text-yellow-600 mt-1">•</span>
+                  <span className="text-gray-300">Get <span className="text-yellow-600 font-semibold">0.05 SOL</span> for each successful referral</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-yellow-600 mt-1">•</span>
+                  <span className="text-gray-300">Rebates paid <span className="text-yellow-600 font-semibold">instantly</span> on-chain</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-yellow-600 mt-1">•</span>
+                  <span className="text-gray-300"><span className="text-yellow-600 font-semibold">No limits</span> on referrals or earnings</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-yellow-600 mt-1">•</span>
+                  <span className="text-gray-300">Track your earnings in real-time</span>
+                </li>
+              </ul>
+              <div className="text-center pt-4 border-t border-yellow-600/20">
+                <div className="text-2xl font-luxury gold-text">0.05 SOL</div>
+                <div className="text-xs text-gray-500 uppercase tracking-wider">Per Referral</div>
+              </div>
+            </div>
+
+            {/* For Referred Users */}
+            <div className="border border-yellow-600/20 bg-black/40 p-8">
+              <div className="text-center mb-6">
+                <div className="inline-block border border-yellow-600/30 px-4 py-2 mb-4">
+                  <span className="text-yellow-600 text-xs tracking-[0.3em] uppercase">For New Users</span>
+                </div>
+                <h3 className="font-luxury text-3xl font-semibold gold-text mb-4">
+                  Save Instantly
+                </h3>
+              </div>
+              <ul className="space-y-4 mb-6">
+                <li className="flex items-start gap-3">
+                  <span className="text-yellow-600 mt-1">•</span>
+                  <span className="text-gray-300">Save <span className="text-yellow-600 font-semibold">0.1 SOL</span> on any transaction</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-yellow-600 mt-1">•</span>
+                  <span className="text-gray-300">Works on <span className="text-yellow-600 font-semibold">all services</span> (Create, Lock, Burn)</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-yellow-600 mt-1">•</span>
+                  <span className="text-gray-300">Discount <span className="text-yellow-600 font-semibold">automatically applied</span></span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-yellow-600 mt-1">•</span>
+                  <span className="text-gray-300">Simple one-time code entry</span>
+                </li>
+              </ul>
+              <div className="text-center pt-4 border-t border-yellow-600/20">
+                <div className="text-2xl font-luxury gold-text">-0.1 SOL</div>
+                <div className="text-xs text-gray-500 uppercase tracking-wider">Instant Discount</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-12 text-center bg-yellow-600/5 border border-yellow-600/20 p-8">
+            <p className="text-gray-300 text-lg font-elegant mb-4">
+              Connect your wallet to generate your referral code
+            </p>
+            <p className="text-gray-500 text-sm">
+              All transactions are secured on-chain with Anchor smart contracts
             </p>
           </div>
         </div>

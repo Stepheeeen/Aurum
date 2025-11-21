@@ -3,6 +3,7 @@
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useState } from "react";
 import { burnTokensWithFee } from "@/lib/solana";
+import { EXPLORER_CLUSTER_SUFFIX } from "@/lib/config";
 
 interface BurnFormData {
   mintAddress: string;
@@ -131,7 +132,7 @@ export default function BurnForm() {
       {/* Fee Info */}
       <div className="border border-yellow-600/20 bg-yellow-600/5 p-6">
         <p className="text-sm text-gray-400 text-center font-light">
-          <span className="text-yellow-600 font-semibold">Service Fee:</span> 0.5 SOL
+          <span className="text-yellow-600 font-semibold">Service Fee:</span> 0.15 SOL (0.05 SOL with referral)
         </p>
       </div>
 
@@ -194,7 +195,7 @@ export default function BurnForm() {
                 {burnResult.burnSig}
               </div>
               <a
-                href={`https://explorer.solana.com/tx/${burnResult.burnSig}?cluster=devnet`}
+                href={`https://explorer.solana.com/tx/${burnResult.burnSig}${EXPLORER_CLUSTER_SUFFIX}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-xs text-yellow-600 hover:text-yellow-500 mt-2 inline-block transition-colors tracking-wide"
@@ -209,7 +210,7 @@ export default function BurnForm() {
                 {burnResult.feeSig}
               </div>
               <a
-                href={`https://explorer.solana.com/tx/${burnResult.feeSig}?cluster=devnet`}
+                href={`https://explorer.solana.com/tx/${burnResult.feeSig}${EXPLORER_CLUSTER_SUFFIX}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-xs text-yellow-600 hover:text-yellow-500 mt-2 inline-block transition-colors tracking-wide"

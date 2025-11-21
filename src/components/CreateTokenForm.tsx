@@ -3,6 +3,7 @@
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useState } from "react";
 import { createMintWithFee } from "@/lib/solana";
+import { EXPLORER_CLUSTER_SUFFIX } from "@/lib/config";
 
 interface TokenFormData {
   name: string;
@@ -58,6 +59,7 @@ export default function CreateTokenForm() {
       const res = await createMintWithFee({
         wallet: { publicKey, signTransaction, sendTransaction },
         supply: formData.supply,
+        decimals: formData.decimals,
       });
 
       setMintAddress(res.mint);
@@ -215,7 +217,7 @@ export default function CreateTokenForm() {
                 {mintAddress}
               </div>
               <a
-                href={`https://explorer.solana.com/address/${mintAddress}?cluster=devnet`}
+                href={`https://explorer.solana.com/address/${mintAddress}${EXPLORER_CLUSTER_SUFFIX}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-xs text-yellow-600 hover:text-yellow-500 mt-2 inline-block transition-colors tracking-wide"
@@ -231,7 +233,7 @@ export default function CreateTokenForm() {
                   {txSignature}
                 </div>
                 <a
-                  href={`https://explorer.solana.com/tx/${txSignature}?cluster=devnet`}
+                  href={`https://explorer.solana.com/tx/${txSignature}${EXPLORER_CLUSTER_SUFFIX}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-xs text-yellow-600 hover:text-yellow-500 mt-2 inline-block transition-colors tracking-wide"
