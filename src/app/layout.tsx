@@ -76,7 +76,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   Built on Solana • SPL Token Standard
                 </p>
                 <p className="text-gray-700 text-xs mt-4 font-light">
-                  © 2024 AURUM. All rights reserved.
+                  © 2025 AURUM. All rights reserved.
                 </p>
               </div>
             </div>
