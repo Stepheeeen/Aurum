@@ -1,0 +1,147 @@
+{
+  "version": "0.1.0",
+  "name": "aurum_hybrid_pricing",
+  "instructions": [
+    {"name": "initializeConfig", "accounts": [
+      {"name": "config", "isMut": true, "isSigner": false},
+      {"name": "treasury", "isMut": true, "isSigner": false},
+      {"name": "owner", "isMut": true, "isSigner": true},
+      {"name": "systemProgram", "isMut": false, "isSigner": false}
+    ], "args": []},
+    {"name": "updatePricing", "accounts": [
+      {"name": "config", "isMut": true, "isSigner": false},
+      {"name": "owner", "isMut": true, "isSigner": true}
+    ], "args": [
+      {"name": "createFee", "type": {"option": "u64"}},
+      {"name": "lockFee", "type": {"option": "u64"}},
+      {"name": "burnFee", "type": {"option": "u64"}},
+      {"name": "referralDiscount", "type": {"option": "u64"}},
+      {"name": "referralRebate", "type": {"option": "u64"}},
+      {"name": "premiumAnchorPrice", "type": {"option": "u64"}}
+    ]},
+    {"name": "createReferral", "accounts": [
+      {"name": "referralAccount", "isMut": true, "isSigner": false},
+      {"name": "user", "isMut": true, "isSigner": true},
+      {"name": "systemProgram", "isMut": false, "isSigner": false}
+    ], "args": []},
+    {"name": "createToken", "accounts": [
+      {"name": "mint", "isMut": true, "isSigner": true},
+      {"name": "config", "isMut": false, "isSigner": false},
+      {"name": "treasury", "isMut": true, "isSigner": false},
+      {"name": "referralAccount", "isMut": true, "isSigner": false, "optional": true},
+      {"name": "referrer", "isMut": true, "isSigner": false, "optional": true},
+      {"name": "payer", "isMut": true, "isSigner": true},
+      {"name": "tokenProgram", "isMut": false, "isSigner": false},
+      {"name": "systemProgram", "isMut": false, "isSigner": false},
+      {"name": "rent", "isMut": false, "isSigner": false}
+    ], "args": [
+      {"name": "decimals", "type": "u8"},
+      {"name": "referralCode", "type": {"option": "string"}}
+    ]},
+    {"name": "lockTokens", "accounts": [
+      {"name": "mint", "isMut": false, "isSigner": false},
+      {"name": "userTokenAccount", "isMut": true, "isSigner": false},
+      {"name": "escrowTokenAccount", "isMut": true, "isSigner": false},
+      {"name": "config", "isMut": false, "isSigner": false},
+      {"name": "treasury", "isMut": true, "isSigner": false},
+      {"name": "referralAccount", "isMut": true, "isSigner": false, "optional": true},
+      {"name": "referrer", "isMut": true, "isSigner": false, "optional": true},
+      {"name": "locker", "isMut": true, "isSigner": true},
+      {"name": "tokenProgram", "isMut": false, "isSigner": false},
+      {"name": "associatedTokenProgram", "isMut": false, "isSigner": false},
+      {"name": "systemProgram", "isMut": false, "isSigner": false}
+    ], "args": [
+      {"name": "amount", "type": "u64"},
+      {"name": "unlockTime", "type": "i64"},
+      {"name": "referralCode", "type": {"option": "string"}}
+    ]},
+    {"name": "burnTokens", "accounts": [
+      {"name": "mint", "isMut": true, "isSigner": false},
+      {"name": "userTokenAccount", "isMut": true, "isSigner": false},
+      {"name": "config", "isMut": false, "isSigner": false},
+      {"name": "treasury", "isMut": true, "isSigner": false},
+      {"name": "referralAccount", "isMut": true, "isSigner": false, "optional": true},
+      {"name": "referrer", "isMut": true, "isSigner": false, "optional": true},
+      {"name": "burner", "isMut": true, "isSigner": true},
+      {"name": "tokenProgram", "isMut": false, "isSigner": false},
+      {"name": "associatedTokenProgram", "isMut": false, "isSigner": false},
+      {"name": "systemProgram", "isMut": false, "isSigner": false}
+    ], "args": [
+      {"name": "amount", "type": "u64"},
+      {"name": "referralCode", "type": {"option": "string"}}
+    ]},
+    {"name": "withdrawFees", "accounts": [
+      {"name": "config", "isMut": false, "isSigner": false},
+      {"name": "treasury", "isMut": true, "isSigner": false},
+      {"name": "owner", "isMut": true, "isSigner": true},
+      {"name": "systemProgram", "isMut": false, "isSigner": false}
+    ], "args": [
+      {"name": "amount", "type": "u64"}
+    ]}
+  ],
+  "accounts": [
+    {"name": "Config", "type": {"kind": "struct", "fields": [
+      {"name": "owner", "type": "publicKey"},
+      {"name": "createFee", "type": "u64"},
+      {"name": "lockFee", "type": "u64"},
+      {"name": "burnFee", "type": "u64"},
+      {"name": "referralDiscount", "type": "u64"},
+      {"name": "referralRebate", "type": "u64"},
+      {"name": "premiumAnchorPrice", "type": "u64"},
+      {"name": "bump", "type": "u8"}
+    ]}},
+    {"name": "ReferralAccount", "type": {"kind": "struct", "fields": [
+      {"name": "referrer", "type": "publicKey"},
+      {"name": "code", "type": "string"},
+      {"name": "totalReferrals", "type": "u64"},
+      {"name": "rebateEarned", "type": "u64"},
+      {"name": "bump", "type": "u8"}
+    ]}},
+    {"name": "Treasury", "type": {"kind": "struct", "fields": [
+      {"name": "totalCollected", "type": "u64"},
+      {"name": "bump", "type": "u8"}
+    ]}}
+  ],
+  "events": [
+    {"name": "FeeCollected", "fields": [
+      {"name": "payer", "type": "publicKey", "index": false},
+      {"name": "amount", "type": "u64", "index": false},
+      {"name": "feeType", "type": "string", "index": false},
+      {"name": "timestamp", "type": "i64", "index": false}
+    ]},
+    {"name": "ReferralUsed", "fields": [
+      {"name": "referrer", "type": "publicKey", "index": false},
+      {"name": "referee", "type": "publicKey", "index": false},
+      {"name": "discountAmount", "type": "u64", "index": false},
+      {"name": "rebateAmount", "type": "u64", "index": false},
+      {"name": "timestamp", "type": "i64", "index": false}
+    ]},
+    {"name": "TokenCreated", "fields": [
+      {"name": "mint", "type": "publicKey", "index": false},
+      {"name": "creator", "type": "publicKey", "index": false},
+      {"name": "feePaid", "type": "u64", "index": false},
+      {"name": "timestamp", "type": "i64", "index": false}
+    ]},
+    {"name": "TokensLocked", "fields": [
+      {"name": "mint", "type": "publicKey", "index": false},
+      {"name": "locker", "type": "publicKey", "index": false},
+      {"name": "amount", "type": "u64", "index": false},
+      {"name": "unlockTime", "type": "i64", "index": false},
+      {"name": "feePaid", "type": "u64", "index": false},
+      {"name": "timestamp", "type": "i64", "index": false}
+    ]},
+    {"name": "TokensBurned", "fields": [
+      {"name": "mint", "type": "publicKey", "index": false},
+      {"name": "burner", "type": "publicKey", "index": false},
+      {"name": "amount", "type": "u64", "index": false},
+      {"name": "feePaid", "type": "u64", "index": false},
+      {"name": "timestamp", "type": "i64", "index": false}
+    ]},
+    {"name": "FeesWithdrawn", "fields": [
+      {"name": "recipient", "type": "publicKey", "index": false},
+      {"name": "amount", "type": "u64", "index": false},
+      {"name": "timestamp", "type": "i64", "index": false}
+    ]}
+  ],
+  "metadata": {"address": "AURMhybridPRICE11111111111111111111111111111"}
+}

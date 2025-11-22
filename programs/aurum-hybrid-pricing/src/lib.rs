@@ -2,7 +2,8 @@ use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Burn, Mint, MintTo, Token, TokenAccount};
 use anchor_spl::associated_token::AssociatedToken;
 
-declare_id!("AURMhybridPRICE11111111111111111111111111111");
+// Updated program ID after keypair generation (FJqGn3dLCFz95Xxg36RXUii3WiuDPtmw4iBfNLtE6vM7)
+declare_id!("FJqGn3dLCFz95Xxg36RXUii3WiuDPtmw4iBfNLtE6vM7");
 
 pub mod constants;
 pub mod state;

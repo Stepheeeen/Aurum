@@ -2,7 +2,7 @@
 
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useState } from "react";
-import { createMintWithFee } from "@/lib/solana";
+import { createMintBasic } from "@/lib/solana";
 import { EXPLORER_CLUSTER_SUFFIX } from "@/lib/config";
 
 interface TokenFormData {
@@ -11,6 +11,7 @@ interface TokenFormData {
   description: string;
   supply: number;
   decimals: number;
+  
 }
 
 export default function CreateTokenForm() {
@@ -21,6 +22,7 @@ export default function CreateTokenForm() {
     description: "",
     supply: 1000000,
     decimals: 9,
+    
   });
   const [isLoading, setIsLoading] = useState(false);
   const [status, setStatus] = useState<{ type: "success" | "error" | ""; message: string }>({
@@ -56,18 +58,14 @@ export default function CreateTokenForm() {
     setTxSignature("");
 
     try {
-      const res = await createMintWithFee({
+      const res = await createMintBasic({
         wallet: { publicKey, signTransaction, sendTransaction },
         supply: formData.supply,
         decimals: formData.decimals,
       });
-
       setMintAddress(res.mint);
-      setTxSignature(res.feeSig);
-      setStatus({
-        type: "success",
-        message: "Token created successfully",
-      });
+      setTxSignature("(mint txn embedded)");
+      setStatus({ type: "success", message: "Token created successfully" });
     } catch (error: any) {
       setStatus({
         type: "error",
@@ -152,6 +150,7 @@ export default function CreateTokenForm() {
             disabled={isLoading}
             className="w-full px-6 py-4 bg-black border border-gray-800 text-gray-200 focus:border-yellow-600 focus:outline-none transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-elegant text-lg"
           />
+          <p className="text-xs text-gray-600 mt-2 font-light tracking-wide">Raw units (no decimals applied yet). For 9 decimals, real token amount = supply / 10^9.</p>
         </div>
 
         <div className="form-group">
@@ -169,8 +168,11 @@ export default function CreateTokenForm() {
             disabled={isLoading}
             className="w-full px-6 py-4 bg-black border border-gray-800 text-gray-200 focus:border-yellow-600 focus:outline-none transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-elegant text-lg"
           />
+          <p className="text-xs text-gray-600 mt-2 font-light tracking-wide">Common: 6 or 9. Display supply = raw / 10^decimals.</p>
         </div>
       </div>
+
+      {/* Referral removed in minimal mode */}
 
       {/* Submit Button */}
       <button

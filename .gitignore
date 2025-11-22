@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# large release artifacts (avoid >100MB push issues)
+solana-release.tar.bz2
+*.tar.bz2

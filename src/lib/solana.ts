@@ -16,11 +16,12 @@ import {
   TOKEN_PROGRAM_ID
 } from "@solana/spl-token";
 
-import { FEE_WALLET, RPC_URL } from "./config";
+// Minimal mode: remove external fee wallet dependency; use optional fee (default zero)
+import { RPC_URL } from "./config";
 
 const connection = new Connection(RPC_URL);
 
-export async function createMintWithFee({
+export async function createMintBasic({
   wallet,
   supply,
   decimals
@@ -29,21 +30,7 @@ export async function createMintWithFee({
   supply: number;
   decimals: number;
 }) {
-  const feeLamports = 0.6 * LAMPORTS_PER_SOL; // Align with on-chain base fee
-
-  // Step 1: Transfer Fee
-  const feeTx = new Transaction().add(
-    SystemProgram.transfer({
-      fromPubkey: wallet.publicKey,
-      toPubkey: new PublicKey(FEE_WALLET),
-      lamports: feeLamports
-    })
-  );
-
-  const feeSig = await wallet.sendTransaction(feeTx, connection);
-  await connection.confirmTransaction(feeSig, "confirmed");
-
-  // Step 2: Create Mint
+  // Create Mint
   const mint = await createMint(
     connection,
     wallet as any,
@@ -61,11 +48,11 @@ export async function createMintWithFee({
 
   await mintTo(connection, wallet as any, mint, ata.address, wallet.publicKey, supply);
 
-  return { mint: mint.toBase58(), feeSig };
+  return { mint: mint.toBase58() };
 }
 
 // Lock tokens function
-export async function lockTokensWithFee({
+export async function lockTokensBasic({
   wallet,
   mintAddress,
   amount,
@@ -76,26 +63,10 @@ export async function lockTokensWithFee({
   amount: number;
   unlockDate: Date;
 }) {
-  const feeLamports = 0.3 * LAMPORTS_PER_SOL; // Align with on-chain base fee
-
-  // Step 1: Transfer Fee
-  const feeTx = new Transaction().add(
-    SystemProgram.transfer({
-      fromPubkey: wallet.publicKey,
-      toPubkey: new PublicKey(FEE_WALLET),
-      lamports: feeLamports
-    })
-  );
-
-  const feeSig = await wallet.sendTransaction(feeTx, connection);
-  await connection.confirmTransaction(feeSig, "confirmed");
-
-  // Step 2: Lock tokens (transfer to escrow/PDA)
-  // For MVP: Create a new keypair as escrow (in production, use PDA)
+  // Warning: client-side escrow (not enforceable unlock). Tokens moved to a generated keypair.
   const escrowKeypair = Keypair.generate();
   const mint = new PublicKey(mintAddress);
 
-  // Get user's token account
   const fromTokenAccount = await getOrCreateAssociatedTokenAccount(
     connection,
     wallet as any,
@@ -103,7 +74,6 @@ export async function lockTokensWithFee({
     wallet.publicKey
   );
 
-  // Create escrow token account
   const toTokenAccount = await getOrCreateAssociatedTokenAccount(
     connection,
     wallet as any,
@@ -111,7 +81,6 @@ export async function lockTokensWithFee({
     escrowKeypair.publicKey
   );
 
-  // Transfer tokens to escrow
   const transferIx = createTransferInstruction(
     fromTokenAccount.address,
     toTokenAccount.address,
@@ -122,12 +91,10 @@ export async function lockTokensWithFee({
   );
 
   const transferTx = new Transaction().add(transferIx);
-
   const lockSig = await wallet.sendTransaction(transferTx, connection);
   await connection.confirmTransaction(lockSig, "confirmed");
 
   return {
-    feeSig,
     lockSig,
     escrowAddress: escrowKeypair.publicKey.toBase58(),
     unlockTimestamp: unlockDate.getTime(),
@@ -136,7 +103,7 @@ export async function lockTokensWithFee({
 }
 
 // Burn tokens function
-export async function burnTokensWithFee({
+export async function burnTokensBasic({
   wallet,
   mintAddress,
   amount
@@ -145,36 +112,15 @@ export async function burnTokensWithFee({
   mintAddress: string;
   amount: number;
 }) {
-  const feeLamports = 0.15 * LAMPORTS_PER_SOL; // Align with on-chain base fee
-
-  // Step 1: Transfer Fee
-  const feeTx = new Transaction().add(
-    SystemProgram.transfer({
-      fromPubkey: wallet.publicKey,
-      toPubkey: new PublicKey(FEE_WALLET),
-      lamports: feeLamports
-    })
-  );
-
-  const feeSig = await wallet.sendTransaction(feeTx, connection);
-  await connection.confirmTransaction(feeSig, "confirmed");
-
-  // Step 2: Burn tokens
   const mint = new PublicKey(mintAddress);
-  
-  // Get user's token account
   const tokenAccount = await getOrCreateAssociatedTokenAccount(
     connection,
     wallet as any,
     mint,
     wallet.publicKey
   );
-
-  // Get balance before burn
   const accountInfo = await getAccount(connection, tokenAccount.address);
   const balanceBefore = Number(accountInfo.amount);
-
-  // Burn tokens
   const burnSig = await splBurn(
     connection,
     wallet as any,
@@ -183,14 +129,10 @@ export async function burnTokensWithFee({
     wallet.publicKey,
     amount
   );
-
-  const balanceAfter = balanceBefore - amount;
-
   return {
-    feeSig,
     burnSig,
     amountBurned: amount,
-    remainingBalance: balanceAfter
+    remainingBalance: balanceBefore - amount
   };
 }
 

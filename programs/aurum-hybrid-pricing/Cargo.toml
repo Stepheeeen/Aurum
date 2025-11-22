@@ -16,9 +16,11 @@ cpi = ["no-entrypoint"]
 default = []
 
 [dependencies]
-anchor-lang = "0.29.0"
-anchor-spl = "0.29.0"
+# Upgraded Anchor crates to align with newer Agave (Solana) SBF toolchain.
+anchor-lang = "0.30.0"
+anchor-spl = "0.30.0"
 
 [dev-dependencies]
+# Retain previous local test harness versions for now; consider bump after successful build.
 solana-program-test = "1.17"
 solana-sdk = "1.17"

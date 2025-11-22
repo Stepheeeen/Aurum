@@ -5,16 +5,16 @@ resolution = true
 skip-lint = false
 
 [programs.devnet]
-aurum_hybrid_pricing = "AURMhybridPRICE11111111111111111111111111111"
+aurum_hybrid_pricing = "FJqGn3dLCFz95Xxg36RXUii3WiuDPtmw4iBfNLtE6vM7"
 
 [programs.mainnet]
-aurum_hybrid_pricing = "AURMhybridPRICE11111111111111111111111111111"
+aurum_hybrid_pricing = "FJqGn3dLCFz95Xxg36RXUii3WiuDPtmw4iBfNLtE6vM7"
 
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "Devnet"
+cluster = "mainnet"  # switched to mainnet deployment target
 wallet = "~/.config/solana/id.json"
 
 [scripts]

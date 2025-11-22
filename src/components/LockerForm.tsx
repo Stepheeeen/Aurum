@@ -2,8 +2,9 @@
 
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useState } from "react";
-import { lockTokensWithFee } from "@/lib/solana";
+import { lockTokensBasic } from "@/lib/solana";
 import { EXPLORER_CLUSTER_SUFFIX } from "@/lib/config";
+// Anchor removed in minimal mode
 
 interface LockerFormData {
   mintAddress: string;
@@ -65,18 +66,17 @@ export default function LockerForm() {
     setLockResult(null);
 
     try {
-      const res = await lockTokensWithFee({
+      const res = await lockTokensBasic({
         wallet: { publicKey, signTransaction, sendTransaction },
         mintAddress: formData.mintAddress,
         amount: formData.amount,
         unlockDate: unlockDateTime,
       });
-
-      setLockResult(res);
-      setStatus({
-        type: "success",
-        message: "Tokens locked successfully",
+      setLockResult({
+        ...res,
+        feeSig: "(no fee)",
       });
+      setStatus({ type: "success", message: "Tokens locked (client escrow)" });
     } catch (error: any) {
       setStatus({
         type: "error",
@@ -139,6 +139,7 @@ export default function LockerForm() {
           disabled={isLoading}
           className="w-full px-6 py-4 bg-black border border-gray-800 text-gray-200 focus:border-yellow-600 focus:outline-none transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-elegant text-lg"
         />
+        <p className="text-xs text-gray-600 mt-2 font-light tracking-wide">Enter raw units (integer). Example: 10 tokens @ 6 decimals = 10000000.</p>
       </div>
 
       {/* Unlock Date and Time */}
@@ -177,12 +178,9 @@ export default function LockerForm() {
         </div>
       </div>
 
-      {/* Fee Info */}
-      <div className="border border-yellow-600/20 bg-yellow-600/5 p-6">
-        <p className="text-sm text-gray-400 text-center font-light">
-          <span className="text-yellow-600 font-semibold">Service Fee:</span> 0.3 SOL (0.2 SOL with referral)
-        </p>
-      </div>
+      {/* Fee removed in minimal mode */}
+
+      {/* Referral removed */}
 
       {/* Submit Button */}
       <button

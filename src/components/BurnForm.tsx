@@ -2,8 +2,9 @@
 
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useState } from "react";
-import { burnTokensWithFee } from "@/lib/solana";
+import { burnTokensBasic } from "@/lib/solana";
 import { EXPLORER_CLUSTER_SUFFIX } from "@/lib/config";
+// Anchor removed in minimal mode
 
 interface BurnFormData {
   mintAddress: string;
@@ -58,17 +59,16 @@ export default function BurnForm() {
     setBurnResult(null);
 
     try {
-      const res = await burnTokensWithFee({
+      const res = await burnTokensBasic({
         wallet: { publicKey, signTransaction, sendTransaction },
         mintAddress: formData.mintAddress,
         amount: formData.amount,
       });
-
-      setBurnResult(res);
-      setStatus({
-        type: "success",
-        message: "Tokens burned successfully",
+      setBurnResult({
+        feeSig: "(no fee)",
+        ...res,
       });
+      setStatus({ type: "success", message: "Tokens burned successfully" });
     } catch (error: any) {
       setStatus({
         type: "error",
@@ -120,6 +120,7 @@ export default function BurnForm() {
         <p className="text-xs text-gray-600 mt-2 font-light tracking-wide">
           Tokens will be permanently removed from circulation
         </p>
+        <p className="text-xs text-gray-600 mt-1 font-light tracking-wide">Raw units (integer). Fractional tokens = amount * 10^decimals.</p>
       </div>
 
       {/* Warning Message */}
@@ -129,12 +130,9 @@ export default function BurnForm() {
         </p>
       </div>
 
-      {/* Fee Info */}
-      <div className="border border-yellow-600/20 bg-yellow-600/5 p-6">
-        <p className="text-sm text-gray-400 text-center font-light">
-          <span className="text-yellow-600 font-semibold">Service Fee:</span> 0.15 SOL (0.05 SOL with referral)
-        </p>
-      </div>
+      {/* Fee removed in minimal mode */}
+
+      {/* Referral removed */}
 
       {/* Submit Button */}
       <button

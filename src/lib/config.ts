@@ -15,4 +15,4 @@ export const RPC_URL = (() => {
 
 export const EXPLORER_CLUSTER_SUFFIX = NETWORK === 'mainnet' ? '' : `?cluster=${NETWORK}`;
 
-export const FEE_WALLET = process.env.NEXT_PUBLIC_FEE_WALLET || '';
+// Minimal mode: Anchor & referral features removed.

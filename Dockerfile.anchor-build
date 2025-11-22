@@ -1,0 +1,10 @@
+FROM ghcr.io/coral-xyz/anchor:0.29.0
+
+WORKDIR /workspace
+COPY programs /workspace/programs
+COPY Anchor.toml /workspace/Anchor.toml
+
+# Build the aurum-hybrid-pricing program
+RUN anchor build --provider.cluster devnet && ls target/idl && ls target/deploy
+
+# Provide built artifacts at /workspace/target for volume extraction
