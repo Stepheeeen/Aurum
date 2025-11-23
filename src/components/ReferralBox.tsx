@@ -2,14 +2,35 @@
 
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useEffect, useState } from 'react';
-import { Connection } from '@solana/web3.js';
-import { 
-  fetchReferralAccount, 
-  generateReferralLink, 
-  lamportsToSOL,
-  ReferralAccountData 
-} from '@/lib/pricing';
+import { Connection, PublicKey } from '@solana/web3.js';
 import { RPC_URL } from '@/lib/config';
+
+// Local fallback types and helpers (replace with real implementations from /lib/pricing if/when available)
+type ReferralAccountData = {
+  code: string;
+  totalReferrals: number;
+  rebateEarned: number; // in lamports
+};
+
+const lamportsToSOL = (lamports: number) => Number((lamports / 1e9).toFixed(3));
+
+const generateReferralLink = (code: string) => {
+  if (typeof window !== 'undefined' && window.location) {
+    return `${window.location.origin}/?ref=${encodeURIComponent(code)}`;
+  }
+  return `/?ref=${encodeURIComponent(code)}`;
+};
+
+const fetchReferralAccount = async (_connection: Connection, publicKey: PublicKey): Promise<ReferralAccountData> => {
+  // Minimal client-side fallback: generate a code from the public key and zeroed stats.
+  // Replace with actual on-chain lookup logic when integrating the proper pricing/referral library.
+  const code = publicKey.toBase58().slice(0, 8);
+  return {
+    code,
+    totalReferrals: 0,
+    rebateEarned: 0,
+  };
+};
 
 export default function ReferralBox() {
   const { publicKey, connected } = useWallet();
